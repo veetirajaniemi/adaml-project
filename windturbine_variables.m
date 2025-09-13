@@ -1,3 +1,5 @@
+%Summaries of the datasets
+
 clearvars
 close all
 clc
@@ -86,3 +88,102 @@ end
 var_names = split(var_names);
 WT39_summary = table(WT39_count',WT39_mean',WT39_std', ...
     WT39_min',WT39_p25',WT39_p50',WT39_p75',WT39_max','VariableNames',row_names,'RowNames',var_names(2:end))
+
+
+
+%% Visualizations of the measurements
+clearvars
+close all
+clc
+%Wind-turbine datasets
+path = 'data.xlsx';
+WT2 = readmatrix(path,Sheet=1,NumHeaderLines=1);
+WT14 = readmatrix(path,Sheet=3,NumHeaderLines=1);
+WT39 = readmatrix(path,Sheet=4,NumHeaderLines=1);
+
+%Remove last column from turbine 2
+WT2 = WT2(:,1:end-1);
+
+
+%Plot sensor measurements.
+%One figure for each sensor, subplots for turbines
+
+for i = 1:27
+    figure
+    
+    subplot(3,1,1)
+    
+    plot(WT2(:,i),'LineWidth',2)
+    legend('WT2')
+
+    ax = gca;
+    ax.FontSize = 20;
+    subplot(3,1,2)
+    
+    %Insert title, for some it doesn't work
+    title(['Variable ',num2str(i)]);
+    plot(WT14(:,i),'LineWidth',2)
+    hold on
+    %Draw lines to measurements with anomaly lines
+    xline(288,'r--','LineWidth',2)
+    xline(358,'r--','LineWidth',2)
+    legend('WT14','Anomaly observation')
+
+    ax = gca;
+    ax.FontSize = 20;
+
+    subplot(3,1,3)
+    plot(WT39(:,i),'LineWidth',2)
+    hold on
+    xline(470,'r--','LineWidth',2)
+    legend('WT39','Anomaly observation')
+    
+    ax = gca;
+    ax.FontSize =20;
+end
+
+%%
+
+%Compare wind-turbine variable values when healthy
+clearvars
+close all
+clc
+%Wind-turbine datasets
+path = 'data.xlsx';
+WT2 = readmatrix(path,Sheet=1,NumHeaderLines=1);
+WT14 = readmatrix(path,Sheet=3,NumHeaderLines=1);
+WT39 = readmatrix(path,Sheet=4,NumHeaderLines=1);
+
+%Remove last column from turbine 2
+WT2 = WT2(:,1:end-1);
+
+for i = 1:27
+    figure
+    plot(WT2(:,i))
+    hold on
+    plot(WT14(359:end,i),'r--')
+    plot(WT39(471:end,i),'o--')
+end
+
+%% Variable correlations
+clearvars
+close all
+clc
+
+path = 'data.xlsx';
+WT2 = readmatrix(path,Sheet=1,NumHeaderLines=1);
+WT14 = readmatrix(path,Sheet=3,NumHeaderLines=1);
+WT39 = readmatrix(path,Sheet=4,NumHeaderLines=1);
+
+%Remove last column from turbine 2
+WT2 = WT2(:,1:end-1);
+
+
+WTcombined = [WT2;WT14;WT39];
+
+%Correlation
+WTcombined(any(isnan(WTcombined),2),:) = [];
+r=corr(WTcombined);
+
+h = heatmap(round(r,2));
+colorbar
