@@ -44,13 +44,13 @@ X_cov = cov(X_z);
 
 [eigVec, eigVal] = eig(X_cov);
 [lamb, idx] = sort(diag(eigVal), 'descend');
-W = eigVec(:, idx);
+W = eigVec(:, idx); % loadings
 
-T = X_z * W
+T = X_z * W % scores (=observations in new PC space)
 
 pcs = 6 % rule of thumb, close to one
 
-PC = X_z * W(:,1:pcs)
+PC = X_z * W(:,1:pcs) % principal components
 
 cumLamb = cumsum(lamb / sum(lamb))
 figure
@@ -110,7 +110,7 @@ sgtitle("2D and 3D PCA Plots")
 %%
 close all
 
-
+figure
 sgtitle('Biplot for each Turbine')
 subplot(1,3,1)
 biplot(W(:,1:2), scores=T(1:index2_end,1:2))
@@ -123,5 +123,18 @@ subplot(1,3,3)
 scoreMatrix = [T(index14_end+1:index39_end,1:2);WT39_faulty_norm(:,1:2)]
 biplot(W(:,1:2), scores=scoreMatrix)
 title('WT39')
+
+%% Loading plots
+close all
+figure
+bar(W(:,1:3))
+hold on
+grid on
+xlabel('Sensor')
+ylabel('Loading')
+xticks(1:25)
+xticklabels(string(1:25))
+legend('PC1', 'PC2', 'Location','best')
+
 
 
