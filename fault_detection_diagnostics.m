@@ -7,17 +7,24 @@ WT2 = readmatrix(path,Sheet=1,NumHeaderLines=1);
 WT14 = readmatrix(path,Sheet=3,NumHeaderLines=1);
 WT39 = readmatrix(path,Sheet=4,NumHeaderLines=1);
 
+<<<<<<< Updated upstream
 %Variable names
 var_names = [];
 
+=======
+>>>>>>> Stashed changes
 
 
 X_healthy = WT2(:,1:end-1);
 X_faulty = WT14;
 
+<<<<<<< Updated upstream
 for i = 1:size(WT2,2)
     
 end
+=======
+varNames = 1:size(WT2,2);
+>>>>>>> Stashed changes
 
 mu  = mean(X_healthy);
 sig = std(X_healthy);
@@ -32,7 +39,11 @@ X_faulty = X_faulty(:,sig>0);
 Xh_scaled = (X_healthy - mu(sig>0))./ sig(sig>0);
 Xf_scaled = (X_faulty  - mu(sig>0)) ./ sig(sig>0);
 
+<<<<<<< Updated upstream
 
+=======
+varNames = string(varNames(sig>0));
+>>>>>>> Stashed changes
 %% PCA
 
 [coeff, score_h, latent, tsq_h, explained] = pca(Xh_scaled, ...
