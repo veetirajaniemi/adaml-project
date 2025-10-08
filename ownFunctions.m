@@ -33,5 +33,45 @@ classdef ownFunctions
             normalized = zscore(data)
         end
 
+        % The following functions from workshop 1 codes!
+        
+        function T2varcontr    = t2contr(data, loadings, latent, comp)
+            score           = data * loadings(:,1:comp);
+            standscores     = bsxfun(@times, score(:,1:comp), 1./sqrt(latent(1:comp,:))');
+            T2contr         = abs(standscores*loadings(:,1:comp)');
+            T2varcontr      = sum(T2contr,1);
+        end
+        
+        function Qcontr   = qcontr(data, loadings, comp, aggregate)
+            score         = data * loadings(:,1:comp);
+            reconstructed = score * loadings(:,1:comp)';
+            residuals     = bsxfun(@minus, data, reconstructed);
+        
+            contrib = residuals.^2;  
+        
+            if nargin < 4 || isempty(aggregate)
+                Qcontr = contrib;                 
+            elseif strcmpi(aggregate, 'per-variable')
+                Qcontr = sum(contrib, 1);         
+            elseif strcmpi(aggregate, 'per-observation')
+                Qcontr = sum(contrib, 2);        
+            else
+                error('qcontr:BadArg', 'aggregate must be [], ''per-variable'', or ''per-observation''.');
+            end
+        end
+        
+        function T2     = t2comp(data, loadings, latent, comp)
+            score       = data * loadings(:,1:comp);
+            standscores = bsxfun(@times, score(:,1:comp), 1./sqrt(latent(1:comp,:))');
+            T2          = sum(standscores.^2,2);
+        end
+        
+        function Qfac   = qcomp(data, loadings, comp)
+            score       = data * loadings(:,1:comp);
+            reconstructed = score * loadings(:,1:comp)';
+            residuals   = bsxfun(@minus, data, reconstructed);
+            Qfac        = sum(residuals.^2,2);
+        end
+
     end
 end
