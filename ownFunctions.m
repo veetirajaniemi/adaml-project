@@ -30,7 +30,7 @@ classdef ownFunctions
         end
        
         function normalized = normalizeData(data)
-            normalized = zscore(data)
+            normalized = zscore(data);
         end
 
         % The following functions from workshop 1 codes!
@@ -73,5 +73,53 @@ classdef ownFunctions
             Qfac        = sum(residuals.^2,2);
         end
 
+        function plot_T2(data, mu_T2, warn_T2, alarm_T2, k,plotcol)
+ 
+            plot(data,'-','LineWidth',1.2,'Color',plotcol);
+            hold on
+            yline(mu_T2,'-','Color',[0.2 0.2 0.2]);
+            yline(warn_T2,'--','Color',[0.3 0.3 0.3],'LineWidth',2);
+            yline(alarm_T2,'-','Color',[0.3 0.3 0.3],'LineWidth',2);
+            xlabel('Sample index');
+            ylabel('T^2');
+            title(sprintf('T^2 Control Chart',k));
+            legend({'T^2','Mean','Warning (95%C.I.)','Alarm (99.5%C.I.)'},'Location','best');
+            grid on
+            hold off
+        end
+
+        function plot_Q(data, mu_Q, warn_Q, alarm_Q, k,plotcol)
+            plot(data,'-','LineWidth',1.2,'Color',plotcol);
+            hold on
+            yline(mu_Q,'-','Color',[0.2 0.2 0.2]);
+            yline(warn_Q,'--','Color',[0.3 0.3 0.3],'LineWidth',2);
+            yline(alarm_Q,'-','Color',[0.3 0.3 0.3],'LineWidth',2);
+            xlabel('Sample index');
+            ylabel('Q (SPE)');
+            title(sprintf('Q Control Chart',k));
+            legend({'Q','Mean','Warning (95%C.I.)','Alarm (99.5%C.I.)'},'Location','best');
+            grid on
+            hold off
+        end
+
+        function plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k)
+            burgundy = [0.50 0.00 0.00];
+            darkCyan = [0.00 0.40 0.40];
+            
+            figure('Color','w');
+            tiledlayout(2,1,'TileSpacing','compact','Padding','compact');
+            
+            nexttile;
+            bar(T2_contrib, 'FaceColor', burgundy, 'EdgeColor', 'none');
+            title(sprintf('T^2 Variable Contributions — obs %d (k=%d), T^2=%.3g', idxObs, k, T2_val));
+            ylabel('Contribution');
+            grid on; box on;
+            
+            nexttile;
+            bar(Q_contrib, 'FaceColor', darkCyan, 'EdgeColor', 'none');
+            title(sprintf('SPE (Q) Variable Contributions — obs %d, Q=%.3g', idxObs, Q_val));
+            ylabel('Contribution');
+            grid on; box on;
+        end
     end
 end
