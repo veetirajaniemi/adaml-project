@@ -8,16 +8,16 @@ funcs = ownFunctions(); % use helper functions
 
 % preprocess + normalize data
 path = 'data.xlsx';
-[WT2, WT14, WT39] = funcs.preprocessData(path)
-WT2_normalized = funcs.normalizeData(WT2)
+[WT2, WT14, WT39] = funcs.preprocessData(path);
+WT2_normalized = funcs.normalizeData(WT2);
 
 
 %% PCA healthy data
 k=11;
 [coeffs, scores, latent, tsq, explained] = pca(WT2_normalized, 'Centered', false, 'NumComponents', k);
 
-T2_h        = t2comp(WT2_normalized, coeffs, latent, k);   
-Q_h         = qcomp(WT2_normalized,  coeffs, k);            
+T2_h        = funcs.t2comp(WT2_normalized, coeffs, latent, k);   
+Q_h         = funcs.qcomp(WT2_normalized,  coeffs, k);            
 
 mu_T2       = mean(T2_h);  
 sd_T2       = std(T2_h);
@@ -126,3 +126,4 @@ grid on
 hold off
 
 sgtitle('PCA-based Control Charts')  % yhteinen otsikko
+
