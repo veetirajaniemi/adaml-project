@@ -29,8 +29,8 @@ classdef ownFunctions
             WT39(:,12) = [];
         end
        
-        function normalized = normalizeData(data)
-            normalized = zscore(data);
+        function normalized = normalizeData(data,mean,sd)
+            normalized = (data - mean)./sd;
         end
 
         % The following functions from workshop 1 codes!

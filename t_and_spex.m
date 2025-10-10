@@ -9,11 +9,14 @@ funcs = ownFunctions(); % use helper functions
 % preprocess + normalize data
 path = 'data.xlsx';
 [WT2, WT14, WT39] = funcs.preprocessData(path);
-WT2_normalized = funcs.normalizeData(WT2);
+
+WT2_mean = mean(WT2,1);
+WT2_std = std(WT2,1);
+WT2_normalized = funcs.normalizeData(WT2,WT2_mean,WT2_std);
 
 
 %% PCA healthy data
-k=11;
+k=6;
 [coeffs, scores, latent, tsq, explained] = pca(WT2_normalized, 'Centered', false, 'NumComponents', k);
 
 T2_h        = funcs.t2comp(WT2_normalized, coeffs, latent, k);   
@@ -29,7 +32,12 @@ alarm_T2    = mu_T2 + 3*sd_T2;
 warn_Q      = mu_Q  + 2*sd_Q;    
 alarm_Q     = mu_Q  + 3*sd_Q;
 
-plotcol     = [0.5 0 0];   
+plotcol     = [0.5 0 0];
+
+%Plot explained variance
+figure
+plot(cumsum(explained)/sum(explained))
+
 figure;
 subplot(1,2,1)
 funcs.plot_T2(T2_h,mu_T2,warn_T2,alarm_T2,k,plotcol)
@@ -79,10 +87,12 @@ WT2(1423:1426,12) = WT2(1422,12);
 WT2(1372:1373,12) = WT2(1371,12);
 WT2(1022:1023,12) = WT2(1021,12);
 
-WT2_normalized = funcs.normalizeData(WT2);
+WT2_mean = mean(WT2,1);
+WT2_std = std(WT2,1);
+WT2_normalized = funcs.normalizeData(WT2,WT2_mean,WT2_std);
 % PCA healthy data
-k=11;
-[coeffs, scores, latent, tsq, explained] = pca(WT2_normalized, 'Centered', false, 'NumComponents', k);
+k=6;
+[coeffs, scores, latent, tsq, explained] = pca(WT2_normalized, 'Centered', true, 'NumComponents', k);
 
 T2_h        = funcs.t2comp(WT2_normalized, coeffs, latent, k);   
 Q_h         = funcs.qcomp(WT2_normalized,  coeffs, k);            
@@ -141,10 +151,11 @@ plot(WT2(:,16))
 WT2(861,16) = WT2(860,16);
 
 % pca without outliers:
-
-WT2_normalized = funcs.normalizeData(WT2);
+WT2_mean = mean(WT2,1);
+WT2_std = std(WT2,1);
+WT2_normalized = funcs.normalizeData(WT2,WT2_mean,WT2_std);
 % PCA healthy data
-k=11;
+k=6;
 [coeffs, scores, latent, tsq, explained] = pca(WT2_normalized, 'Centered', false, 'NumComponents', k);
 
 T2_h        = funcs.t2comp(WT2_normalized, coeffs, latent, k);   
@@ -176,7 +187,7 @@ sgtitle('PCA-based Control Charts')  % yhteinen otsikko
 %% faulty turbines projected
 
 % Normalization
-WT39_normalized = funcs.normalizeData(WT39);
+WT39_normalized = funcs.normalizeData(WT39,WT2_mean,WT2_std);
 
 T2_f = funcs.t2comp(WT39_normalized, coeffs, latent, k);   
 Q_f  = funcs.qcomp(WT39_normalized,  coeffs, k);   
@@ -191,7 +202,7 @@ funcs.plot_Q(T2_f,mu_Q, warn_Q, alarm_Q, k, plotcol)
 sgtitle('PCA-based Control Charts') 
 
 % Normalization
-WT14_normalized = funcs.normalizeData(WT14);
+WT14_normalized = funcs.normalizeData(WT14,WT2_mean,WT2_std);
 
 T2_f2 = funcs.t2comp(WT14_normalized, coeffs, latent, k);   
 Q_f2  = funcs.qcomp(WT14_normalized,  coeffs, k);   
