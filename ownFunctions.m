@@ -33,6 +33,14 @@ classdef ownFunctions
             normalized = (data - mean)./sd;
         end
 
+        function WT2  = removeOutliers(WT2)
+            WT2(1423:1426,12) = NaN;
+            WT2(1372:1373,12) = NaN;
+            WT2(1022:1023,12) = NaN;
+            WT2(861,16) = NaN
+            WT2 = fillmissing(WT2, 'linear')
+        end
+
         % The following functions from workshop 1 codes!
         
         function T2varcontr    = t2contr(data, loadings, latent, comp)
@@ -121,5 +129,7 @@ classdef ownFunctions
             ylabel('Contribution');
             grid on; box on;
         end
+
+        
     end
 end
