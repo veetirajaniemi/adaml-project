@@ -121,8 +121,6 @@ classdef ownFunctions
             bar(T2_contrib, 'FaceColor', burgundy, 'EdgeColor', 'none');
             title(sprintf('T^2 Variable Contributions — obs %d (k=%d), T^2=%.3g', idxObs, k, T2_val));
             ylabel('Contribution');
-
-            xlabel('Variables');
             xticks(1:length(varLabels));
             xticklabels(varLabels)
             grid on; box on;
