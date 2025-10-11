@@ -1,8 +1,8 @@
 %% INFO
 
-% In this script we try to detect faulty sensors by removing different variables
-% from our PCA model and seeing its' effects. Control charts and biplots
-% are used. 
+% In this script we try to detect faulty sensors with WT14 data by removing 
+% different variables from our PCA model and seeing its' effects. Control charts 
+% and biplots are used. 
 
 %% Data Preprocessing, remove variables
 
@@ -20,11 +20,13 @@ path = 'data.xlsx';
 vars = "var-" + (1:25);
 
 
-%Remove variables
-WT2(:,[1 2 3 4 5 6 10 11 13 14 15 16 17 19 20 21 22 23 24 25]) = [];
-WT14(:,[1 2 3 4 5 6 10 11 13 14 15 16 17 19 20 21 22 23 24 25]) = [];
-WT39(:,[1 2 3 4 5 6 10 11 13 14 15 16 17 19 20 21 22 23 24 25]) = [];
-vars([1 2 3 4 5 6 10 11 13 14 15 16 17 19 20 21 22 23 24 25]) = []
+%removed = [1 2 3 4 5 6 10 11 13 14 15 16 17 19 20 21 22 23 24 25]
+removed = [12]
+
+WT2(:,removed) = [];
+WT14(:,removed) = [];
+WT39(:,removed) = [];
+vars(removed) = []
 
 WT2_mean = mean(WT2,1);
 WT2_std = std(WT2,1);
@@ -82,8 +84,8 @@ WT14_normalized_start = WT14_normalized(1:anomaly-1,:)
 WT14_normalized_end = WT14_normalized(anomaly+1:end,:)
 
 
-T2_f2 = funcs.t2comp(WT14_normalized, coeffs, latent, k);   
-Q_f2  = funcs.qcomp(WT14_normalized,  coeffs, k);   
+T2_f2 = funcs.t2comp(WT14_normalized_end, coeffs, latent, k);   
+Q_f2  = funcs.qcomp(WT14_normalized_end,  coeffs, k);   
 figure;
 
 subplot(1,2,1)
@@ -97,7 +99,7 @@ sgtitle('PCA-based Control Charts')
 %idx = 217;
 %idxObs = anomaly + idx;
 
-idxObs = 170
+idxObs = 177
 
 xrow = WT14_normalized(idxObs, :);  
 T2_contrib = funcs.t2contr(xrow, coeffs, latent, k);  
