@@ -75,23 +75,7 @@ for idxObs = [1423, 1022, 1372] % testing possible outlier values
     T2_val = funcs.t2comp(xrow, coeffs, latent, k);
     Q_val  = funcs.qcomp(xrow,  coeffs, k);
     
-    burgundy = [0.50 0.00 0.00];
-    darkCyan = [0.00 0.40 0.40];
-    
-    figure('Color','w');
-    tiledlayout(2,1,'TileSpacing','compact','Padding','compact');
-    
-    nexttile;
-    bar(T2_contrib, 'FaceColor', burgundy, 'EdgeColor', 'none');
-    title(sprintf('T^2 Variable Contributions — obs %d (k=%d), T^2=%.3g', idxObs, k, T2_val));
-    ylabel('Contribution');
-    grid on; box on;
-    
-    nexttile;
-    bar(Q_contrib, 'FaceColor', darkCyan, 'EdgeColor', 'none');
-    title(sprintf('SPE (Q) Variable Contributions — obs %d, Q=%.3g', idxObs, Q_val));
-    ylabel('Contribution');
-    grid on; box on;
+    funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k)
 end
 
 
