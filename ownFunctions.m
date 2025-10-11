@@ -121,12 +121,14 @@ classdef ownFunctions
             bar(T2_contrib, 'FaceColor', burgundy, 'EdgeColor', 'none');
             title(sprintf('T^2 Variable Contributions — obs %d (k=%d), T^2=%.3g', idxObs, k, T2_val));
             ylabel('Contribution');
+            xlabel('Variables');
             grid on; box on;
             
             nexttile;
             bar(Q_contrib, 'FaceColor', darkCyan, 'EdgeColor', 'none');
-            title(sprintf('SPE (Q) Variable Contributions — obs %d, Q=%.3g', idxObs, Q_val));
+            title(sprintf('SPE (Q) Variable Contributions — obs %d (k=%d), Q=%.3g', idxObs, k, Q_val));
             ylabel('Contribution');
+            xlabel('Variables');
             grid on; box on;
         end
 
