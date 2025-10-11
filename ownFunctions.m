@@ -131,7 +131,6 @@ classdef ownFunctions
             xticks(1:length(varLabels));
             xticklabels(varLabels)
             ylabel('Contribution');
-            xlabel('Variables');
             grid on; box on;
         end
 
