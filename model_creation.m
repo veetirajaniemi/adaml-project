@@ -91,6 +91,7 @@ WT2(1372:1373,12) = NaN;
 WT2(1022:1023,12) = NaN;
 WT2 = fillmissing(WT2, 'linear');
 
+figure
 plot(WT2(:,12))
 
 %% PCA again after variable 12 modified, same visualizations
@@ -103,7 +104,6 @@ WT2_normalized = funcs.normalizeData(WT2,WT2_mean,WT2_std);
 [coeffs, scores, latent, tsq, explained] = pca(WT2_normalized, 'Centered', true, 'NumComponents', k);
 
 k=6;
-figure
 
 T2_h        = funcs.t2comp(WT2_normalized, coeffs, latent, k);   
 Q_h         = funcs.qcomp(WT2_normalized,  coeffs, k);            
@@ -166,7 +166,7 @@ WT2_mean = mean(WT2,1);
 WT2_std = std(WT2,1);
 WT2_normalized = funcs.normalizeData(WT2,WT2_mean,WT2_std);
 % PCA healthy data
-k=6;
+k=5;
 [coeffs, scores, latent, tsq, explained] = pca(WT2_normalized, 'Centered', false, 'NumComponents', k);
 
 T2_h        = funcs.t2comp(WT2_normalized, coeffs, latent, k);   
@@ -194,6 +194,19 @@ funcs.plot_Q(Q_h,mu_Q, warn_Q, alarm_Q, k, plotcol)
 
 sgtitle('PCA-based Control Charts')  % yhteinen otsikko
 
+%% Biplot without outliers
+close all
+
+vars = "var-" + (1:25)
+figure
+title('Biplot with the First 2 PCs')
+hold on
+grid on
+biplot(coeffs(:,1:2), 'Scores', scores(:,1:2), 'VarLabels',vars);
+xlabel('PC1')
+ylabel('PC2')
+
+
 %% Variable contributions WT2 
 close all
 
@@ -205,8 +218,6 @@ T2_val = funcs.t2comp(xrow, coeffs, latent, k);
 Q_val  = funcs.qcomp(xrow,  coeffs, k);
 
 funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, vars)
-
-
 
 %% Control charts with faulty turbine WT14
 
