@@ -21,7 +21,7 @@ classdef ownFunctions
             WT14(:,12) = [];
             
             % NaN value interpolation
-            nanInd = find(isnan(WT14))
+            nanInd = find(isnan(WT14));
             WT14(nanInd) = mean(WT14(nanInd-1), WT14(nanInd+1));
             
             % WT39, remove extra variables
@@ -37,8 +37,8 @@ classdef ownFunctions
             WT2(1423:1426,12) = NaN;
             WT2(1372:1373,12) = NaN;
             WT2(1022:1023,12) = NaN;
-            WT2(861,16) = NaN
-            WT2 = fillmissing(WT2, 'linear')
+            WT2(861,16) = NaN;
+            WT2 = fillmissing(WT2, 'linear');
         end
 
         % The following functions from workshop 1 codes!
@@ -110,7 +110,7 @@ classdef ownFunctions
             hold off
         end
 
-        function plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k)
+        function plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, varLabels)
             burgundy = [0.50 0.00 0.00];
             darkCyan = [0.00 0.40 0.40];
             
@@ -121,12 +121,17 @@ classdef ownFunctions
             bar(T2_contrib, 'FaceColor', burgundy, 'EdgeColor', 'none');
             title(sprintf('T^2 Variable Contributions — obs %d (k=%d), T^2=%.3g', idxObs, k, T2_val));
             ylabel('Contribution');
+
             xlabel('Variables');
+            xticks(1:length(varLabels));
+            xticklabels(varLabels)
             grid on; box on;
             
             nexttile;
             bar(Q_contrib, 'FaceColor', darkCyan, 'EdgeColor', 'none');
             title(sprintf('SPE (Q) Variable Contributions — obs %d (k=%d), Q=%.3g', idxObs, k, Q_val));
+            xticks(1:length(varLabels));
+            xticklabels(varLabels)
             ylabel('Contribution');
             xlabel('Variables');
             grid on; box on;
