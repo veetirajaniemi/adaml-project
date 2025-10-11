@@ -26,13 +26,14 @@ WT2_mean = mean(WT2,1);
 WT2_std = std(WT2,1);
 WT2_normalized = funcs.normalizeData(WT2,WT2_mean,WT2_std);
 
-
+vars = "var-" + (1:25);
 
 %% PCA with healthy data
 close all
 
 k=6; % rule of thumb, eigenvals > 1
 [coeffs, scores, latent, tsq, explained] = pca(WT2_normalized, 'Centered', false, 'NumComponents', k);
+
 
 % values for T^2 and Q statistics
 
@@ -75,7 +76,7 @@ for idxObs = [1423, 1022, 1372] % testing possible outlier values
     T2_val = funcs.t2comp(xrow, coeffs, latent, k);
     Q_val  = funcs.qcomp(xrow,  coeffs, k);
     
-    funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k)
+    funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, vars)
 end
 
 
@@ -88,7 +89,7 @@ plot(WT2(:,12))
 WT2(1423:1426,12) = NaN;
 WT2(1372:1373,12) = NaN;
 WT2(1022:1023,12) = NaN;
-WT2 = fillmissing(WT2, 'linear')
+WT2 = fillmissing(WT2, 'linear');
 
 plot(WT2(:,12))
 
@@ -141,23 +142,7 @@ Q_contrib  = funcs.qcontr(xrow,  coeffs, k);
 T2_val = funcs.t2comp(xrow, coeffs, latent, k);
 Q_val  = funcs.qcomp(xrow,  coeffs, k);
 
-burgundy = [0.50 0.00 0.00];
-darkCyan = [0.00 0.40 0.40];
-
-figure('Color','w');
-tiledlayout(2,1,'TileSpacing','compact','Padding','compact');
-
-nexttile;
-bar(T2_contrib, 'FaceColor', burgundy, 'EdgeColor', 'none');
-title(sprintf('T^2 Variable Contributions — obs %d (k=%d), T^2=%.3g', idxObs, k, T2_val));
-ylabel('Contribution');
-grid on; box on;
-
-nexttile;
-bar(Q_contrib, 'FaceColor', darkCyan, 'EdgeColor', 'none');
-title(sprintf('SPE (Q) Variable Contributions — obs %d, Q=%.3g', idxObs, Q_val));
-ylabel('Contribution');
-grid on; box on;
+funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, vars)
 
 figure
 title('Variable 16')
@@ -219,7 +204,7 @@ Q_contrib  = funcs.qcontr(xrow,  coeffs, k);
 T2_val = funcs.t2comp(xrow, coeffs, latent, k);
 Q_val  = funcs.qcomp(xrow,  coeffs, k);
 
-funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k)
+funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, vars)
 
 
 
@@ -267,7 +252,7 @@ T2_contrib = funcs.t2contr(xrow, coeffs, latent, k);
 Q_contrib  = funcs.qcontr(xrow,  coeffs, k);            
 T2_val = funcs.t2comp(xrow, coeffs, latent, k);
 Q_val  = funcs.qcomp(xrow,  coeffs, k);
-funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k)
+funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k,vars)
 
 % Variable number 12 is contributing to everything!
 
@@ -312,4 +297,4 @@ Q_contrib  = funcs.qcontr(xrow,  coeffs, k);
 T2_val = funcs.t2comp(xrow, coeffs, latent, k);
 Q_val  = funcs.qcomp(xrow,  coeffs, k);
 
-funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k)
+funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, vars)
