@@ -21,7 +21,7 @@ vars = "var-" + (1:25);
 
 %filter_vars = [1 2 3 4 5 6 10 11 13 14 15 16 17 19 20 21 22 23 24 25];
 %Select variables to remove
-filter_vars = [12,9,17];%,17,16,19,18,14,20,23,24,25,21,13,1,2,15,7];
+filter_vars = [12,9,17,16,19,18,14,20,23,24,25,13,1,2];
 
 WT2_mean = mean(WT2,1);
 WT2_std = std(WT2,1);
@@ -98,8 +98,6 @@ sgt = sgtitle('PCA-based Control Charts')
 sgt.FontSize = 20;
 
 
-%%
-
 % 470 is the anomaly point
 anomaly = 470;
 WT39_normalized_start = WT39_normalized(1:anomaly-1,:)
@@ -120,21 +118,12 @@ ax = gca;
 ax.FontSize = 20;
 sgt = sgtitle('PCA-based Control Charts')
 sgt.FontSize = 20;
-% figure
-% subplot(1,2,1)
-% funcs.plot_T2(log10(T2_f2),log10(mu_T2),log10(warn_T2),log10(alarm_T2),k,plotcol)
-% ylabel('log10 T^2')
-% ax = gca;
-% ax.FontSize = 20;
-% subplot(1,2,2)
-% funcs.plot_Q(log10(Q_f2),log10(mu_Q), log10(warn_Q), log10(alarm_Q), k, plotcol)
-% ylabel('log10 Q')
-% sgt = sgtitle('PCA-based Control Charts')
-% sgt.FontSize = 20;
+
 idx = 773;
 idxObs = anomaly + idx;
 ax = gca;
 ax.FontSize = 20;
+%Which idx to use for contribution charts
 idxObs = 470;
 
 xrow = WT39_normalized(idxObs, :);
@@ -147,13 +136,14 @@ funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, vars)
 
 %% Projecting to healthy pca
 
-
+%Following code is from Workshop 1 material. 
 scores_WT39_projected = WT39_normalized * coeffs
 scores_WT2 = scores
 
 burgundy = [0.50 0.00 0.00];
 darkCyan = [0.00 0.40 0.40];
 lw = 3; ms = 3;
+
 
 for p = 1:k-1
     q = p + 1;
@@ -175,7 +165,8 @@ for p = 1:k-1
     title(sprintf('Biplot PC%d–PC%d', p, q));
     xlabel(sprintf('PC%d (%.1f%%)', p, explained(p)));
     ylabel(sprintf('PC%d (%.1f%%)', q, explained(q)));
-
+    ax = gca;
+    ax.FontSize = 20;
     nexttile; hold on; box on; grid on;
     plot(SH(:,1), SH(:,2), 'o', 'MarkerFaceColor', burgundy, ...
         'MarkerEdgeColor', burgundy, 'LineWidth', lw, 'MarkerSize', ms);
@@ -187,4 +178,6 @@ for p = 1:k-1
     legend({'Healthy','Faulty'}, 'Location','best');
     xlim([xmin-mx, xmax+mx]); ylim([ymin-my, ymax+my]);
     hold off;
+    ax = gca;
+    ax.FontSize = 20;
 end
