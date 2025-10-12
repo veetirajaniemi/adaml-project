@@ -136,7 +136,7 @@ funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, vars)
 
 %% Projecting to healthy pca
 
-%Following code is from Workshop 1 material. 
+%Following code is from Workshop 1 material by Zina-Sabrina Duma. 
 scores_WT39_projected = WT39_normalized * coeffs
 scores_WT2 = scores
 
