@@ -19,10 +19,35 @@ path = 'data.xlsx';
 
 vars = "var-" + (1:25);
 
-filter_vars = [16,12,1,2,22,17,18,3,5,10,11,24,25,21,13,6,7,8,4];
 %filter_vars = [1 2 3 4 5 6 10 11 13 14 15 16 17 19 20 21 22 23 24 25];
-%Remove variables
-filter_vars = [];
+%Select variables to remove
+filter_vars = [12,9,17];%,17,16,19,18,14,20,23,24,25,21,13,1,2,15,7];
+
+WT2_mean = mean(WT2,1);
+WT2_std = std(WT2,1);
+
+
+WT39_normalized = funcs.normalizeData(WT39,WT2_mean,WT2_std);
+
+%% Plot filtered variables
+figure
+for i = 1:length(filter_vars)
+    fi = filter_vars(i);
+    subplot(5,5,i)
+    plot(WT39_normalized(:,fi),'LineWidth',2)
+    hold on
+    xline(470, 'Color', 'r', 'LineWidth', 2);
+    title(['Variable ',num2str(fi)])
+    ax = gca;
+    ax.FontSize = 20;
+
+end
+sgt = sgtitle('Removed variables, WT39 normalized')
+sgt.FontSize = 20;
+
+
+
+
 WT2(:,filter_vars) = [];
 WT39(:,filter_vars) = [];
 vars(filter_vars) = [];
@@ -30,6 +55,8 @@ vars(filter_vars) = [];
 WT2_mean = mean(WT2,1);
 WT2_std = std(WT2,1);
 WT2_normalized = funcs.normalizeData(WT2,WT2_mean,WT2_std);
+WT39_normalized = funcs.normalizeData(WT39,WT2_mean,WT2_std);
+
 
 %% PCA with removed variables
 [coeffs, scores, latent, tsq, explained] = pca(WT2_normalized, 'Centered', false);
@@ -69,22 +96,8 @@ funcs.plot_Q(Q_h,mu_Q, warn_Q, alarm_Q, k, plotcol)
 
 sgt = sgtitle('PCA-based Control Charts')
 sgt.FontSize = 20;
-%% Testing WT39
 
-WT39_normalized = funcs.normalizeData(WT39,WT2_mean,WT2_std);
 
-figure
-for i = 11:15
-    subplot(1,5,i-10)
-    plot(WT39_normalized(:,i),'LineWidth',2)
-    hold on
-    xline(470, 'Color', 'r', 'LineWidth', 2);
-    ax = gca;
-    ax.FontSize = 20;
-
-end
-sgt = sgtitle('Variables 11-15, WT39 normalized')
-sgt.FontSize = 20;
 %%
 
 % 470 is the anomaly point
@@ -107,19 +120,22 @@ ax = gca;
 ax.FontSize = 20;
 sgt = sgtitle('PCA-based Control Charts')
 sgt.FontSize = 20;
-figure
-subplot(1,2,1)
-funcs.plot_T2(log10(T2_f2),log10(mu_T2),log10(warn_T2),log10(alarm_T2),k,plotcol)
-
-subplot(1,2,2)
-funcs.plot_Q(log10(Q_f2),log10(mu_Q), log10(warn_Q), log10(alarm_Q), k, plotcol)
-sgt = sgtitle('PCA-based Control Charts')
-sgt.FontSize = 20;
-idx = 861;
+% figure
+% subplot(1,2,1)
+% funcs.plot_T2(log10(T2_f2),log10(mu_T2),log10(warn_T2),log10(alarm_T2),k,plotcol)
+% ylabel('log10 T^2')
+% ax = gca;
+% ax.FontSize = 20;
+% subplot(1,2,2)
+% funcs.plot_Q(log10(Q_f2),log10(mu_Q), log10(warn_Q), log10(alarm_Q), k, plotcol)
+% ylabel('log10 Q')
+% sgt = sgtitle('PCA-based Control Charts')
+% sgt.FontSize = 20;
+idx = 773;
 idxObs = anomaly + idx;
 ax = gca;
 ax.FontSize = 20;
-%idxObs = 1331
+idxObs = 470;
 
 xrow = WT39_normalized(idxObs, :);
 T2_contrib = funcs.t2contr(xrow, coeffs, latent, k);
@@ -128,8 +144,7 @@ Q_contrib  = funcs.qcontr(xrow,  coeffs, k);
 T2_val = funcs.t2comp(xrow, coeffs, latent, k);
 Q_val  = funcs.qcomp(xrow,  coeffs, k);
 funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, vars)
-ax = gca;
-ax.FontSize = 20;
+
 %% Projecting to healthy pca
 
 
