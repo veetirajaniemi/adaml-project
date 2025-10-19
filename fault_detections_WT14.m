@@ -20,7 +20,7 @@ path = 'data.xlsx';
 vars = "var-" + (1:25);
 
 % Variables to be removed
-removed = [12 9 17 16 11 19 18 20 4 3 22] 
+removed = [12 9 17 16 11] 
 
 WT2(:,removed) = [];
 WT14(:,removed) = [];
@@ -87,10 +87,10 @@ Q_f2  = funcs.qcomp(WT14_normalized,  coeffs, k);
 figure;
 
 subplot(1,2,1)
-funcs.plot_T2(T2_f2,mu_T2,warn_T2,alarm_T2,k,plotcol)
+funcs.plot_T2(log10(T2_f2),log10(mu_T2),log10(warn_T2),log10(alarm_T2),k,plotcol)
 
 subplot(1,2,2)
-funcs.plot_Q(Q_f2,mu_Q, warn_Q, alarm_Q, k, plotcol)
+funcs.plot_Q(log10(Q_f2),log10(mu_Q), log10(warn_Q), log10(alarm_Q), k, plotcol)
 sgtitle('PCA-based Control Charts') 
 
 %anomaly = 359;
