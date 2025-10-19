@@ -23,6 +23,7 @@ vars = "var-" + (1:25);
 %Select variables to remove
 filter_vars = [12,9,17,16,19,18,14,20,23,24,25,13,1,2];
 
+
 WT2_mean = mean(WT2,1);
 WT2_std = std(WT2,1);
 
@@ -109,11 +110,11 @@ Q_f2  = funcs.qcomp(WT39_normalized,  coeffs, k);
 figure;
 
 subplot(1,2,1)
-funcs.plot_T2((T2_f2),(mu_T2),(warn_T2),(alarm_T2),k,plotcol)
+funcs.plot_T2(log10(T2_f2),log10(mu_T2),log10(warn_T2),log10(alarm_T2),k,plotcol)
 ax = gca;
 ax.FontSize = 20;
 subplot(1,2,2)
-funcs.plot_Q((Q_f2),(mu_Q), (warn_Q), (alarm_Q), k, plotcol)
+funcs.plot_Q(log10(Q_f2),log10(mu_Q), log10(warn_Q), log10(alarm_Q), k, plotcol)
 ax = gca;
 ax.FontSize = 20;
 sgt = sgtitle('PCA-based Control Charts')
