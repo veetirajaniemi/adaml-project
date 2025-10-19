@@ -19,9 +19,8 @@ path = 'data.xlsx';
 
 vars = "var-" + (1:25);
 
-
-%removed = [1 2 3 4 5 6 10 11 13 14 15 16 17 19 20 21 22 23 24 25]
-removed = [12]
+% Variables to be removed
+removed = [12 9 17 16 11 19 18 20 4 3 22] 
 
 WT2(:,removed) = [];
 WT14(:,removed) = [];
@@ -76,16 +75,15 @@ WT14_normalized = funcs.normalizeData(WT14,WT2_mean,WT2_std);
 % end
 % sgtitle('Variables 11-15, WT14 normalized')
 
-%%
+%% Visualizig control charts
 
-% 359 is the anomaly point
 anomaly = 359;
 WT14_normalized_start = WT14_normalized(1:anomaly-1,:)
 WT14_normalized_end = WT14_normalized(anomaly+1:end,:)
 
 
-T2_f2 = funcs.t2comp(WT14_normalized_end, coeffs, latent, k);   
-Q_f2  = funcs.qcomp(WT14_normalized_end,  coeffs, k);   
+T2_f2 = funcs.t2comp(WT14_normalized, coeffs, latent, k);   
+Q_f2  = funcs.qcomp(WT14_normalized,  coeffs, k);   
 figure;
 
 subplot(1,2,1)
@@ -99,7 +97,7 @@ sgtitle('PCA-based Control Charts')
 %idx = 217;
 %idxObs = anomaly + idx;
 
-idxObs = 177
+idxObs = 288
 
 xrow = WT14_normalized(idxObs, :);  
 T2_contrib = funcs.t2contr(xrow, coeffs, latent, k);  
@@ -114,6 +112,10 @@ funcs.plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, vars)
 
 scores_WT14_projected = WT14_normalized * coeffs
 scores_WT2 = scores
+
+
+% The following code from Workshop 1 material by
+% Zina-Sabrina Duma
 
 burgundy = [0.50 0.00 0.00];
 darkCyan = [0.00 0.40 0.40];

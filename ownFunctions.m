@@ -3,6 +3,9 @@
 % Not to run, only the helper function scripts so don't need to repeat all
 % :)
 
+% The functions for computing and visualizing T^2 and SPEx control charts
+% from Workshop 1 material by Zina-Sabrina Duma
+
 classdef ownFunctions
     methods (Static)
         function [WT2, WT14, WT39] = preprocessData(path)
