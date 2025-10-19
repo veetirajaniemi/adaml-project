@@ -108,6 +108,7 @@ classdef ownFunctions
             legend({'Q','Mean','Warning (95%C.I.)','Alarm (99.5%C.I.)'},'Location','best');
             grid on
             hold off
+
         end
 
         function plot_var_contr(T2_contrib,Q_contrib, T2_val, Q_val, idxObs, k, varLabels)
@@ -123,6 +124,8 @@ classdef ownFunctions
             ylabel('Contribution');
             xticks(1:length(varLabels));
             xticklabels(varLabels)
+            ax = gca;
+            ax.FontSize = 20;
             grid on; box on;
             
             nexttile;
@@ -131,6 +134,8 @@ classdef ownFunctions
             xticks(1:length(varLabels));
             xticklabels(varLabels)
             ylabel('Contribution');
+            ax = gca;
+            ax.FontSize = 20;
             grid on; box on;
         end
 
